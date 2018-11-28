@@ -1,0 +1,30 @@
+stages:
+  - package
+  - publish
+  - deploy_to_staging
+
+cache:
+  paths:
+    - ./target
+
+package:
+  stage: package
+  script:
+    - mvn package
+  only:
+    - master
+
+
+publish:
+  stage: publish
+  script:
+    - aws s3 target/example-0.1-SNAPSHOT.jar s3://tcs-repo/
+  only:
+    - master
+
+deploy_to_staging:
+  stage: deploy_to_staging
+  script: >
+    echo "Not done yet"
+  only:
+    - master

@@ -87,7 +87,7 @@ public class ProxyWithStream implements RequestStreamHandler {
 //            responseJson.put("isBase64Encoded", false);
 //            responseJson.put("statusCode", responseCode);
 //            responseJson.put("headers", headerJson);
-            responseJson.put("body", responseBody.toString());  
+//            responseJson.put("body", responseBody.toString());  
 
 //        } catch(ParseException pex) {
 //            responseJson.put("statusCode", "400");
@@ -96,7 +96,7 @@ public class ProxyWithStream implements RequestStreamHandler {
 
         logger.log(responseJson.toJSONString());
         OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
-        writer.write(responseJson.toJSONString());  
+        writer.write(responseBody.toJSONString());  
         writer.close();
     }
 }

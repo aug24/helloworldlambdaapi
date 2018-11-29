@@ -31,7 +31,8 @@ public class ProxyWithStream implements RequestStreamHandler {
         logger.log("Loading Java Lambda handler of ProxyWithStream");
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        JSONObject responseJson = new JSONObject();
+//        JSONObject responseJson = new JSONObject();
+        JSONObject responseBody = new JSONObject();
 //        String name = "you";
 //        String city = "World";
 //        String time = "day";
@@ -73,7 +74,7 @@ public class ProxyWithStream implements RequestStreamHandler {
 //
 //
         String greeting = "Banana";
-            JSONObject responseBody = new JSONObject();
+            
             responseBody.put("input", event.toJSONString());
             responseBody.put("message", greeting);
             
@@ -90,11 +91,11 @@ public class ProxyWithStream implements RequestStreamHandler {
 //            responseJson.put("body", responseBody.toString());  
 
         } catch(ParseException pex) {
-            responseJson.put("statusCode", "400");
-            responseJson.put("exception", pex);
+            responseBody.put("statusCode", "400");
+            responseBody.put("exception", pex);
         }
 
-        logger.log(responseJson.toJSONString());
+        logger.log(responseBody.toJSONString());
         OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
         writer.write(responseBody.toJSONString());  
         writer.close();

@@ -17,7 +17,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.json.simple.parser.JSONParser;
-
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 
 public class ProxyWithStream implements RequestStreamHandler {
@@ -75,13 +76,17 @@ public class ProxyWithStream implements RequestStreamHandler {
             JSONObject responseBody = new JSONObject();
 //            responseBody.put("input", event.toJSONString());
             responseBody.put("message", greeting);
+            
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+
+            responseBody.put("date", timeStamp);
 //
-            JSONObject headerJson = new JSONObject();
+//            JSONObject headerJson = new JSONObject();
 //            headerJson.put("x-custom-header", "my custom header value");
 
-            responseJson.put("isBase64Encoded", false);
-            responseJson.put("statusCode", responseCode);
-            responseJson.put("headers", headerJson);
+//            responseJson.put("isBase64Encoded", false);
+//            responseJson.put("statusCode", responseCode);
+//            responseJson.put("headers", headerJson);
             responseJson.put("body", responseBody.toString());  
 
 //        } catch(ParseException pex) {

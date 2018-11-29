@@ -39,7 +39,7 @@ public class ProxyWithStream implements RequestStreamHandler {
         String responseCode = "200";
 
 //        try {
-//            JSONObject event = (JSONObject)parser.parse(reader);
+            JSONObject event = (JSONObject)parser.parse(reader);
 //            if (event.get("queryStringParameters") != null) {
 //                JSONObject qps = (JSONObject)event.get("queryStringParameters");
 //                if ( qps.get("name") != null) {
@@ -74,7 +74,7 @@ public class ProxyWithStream implements RequestStreamHandler {
 //
         String greeting = "Banana";
             JSONObject responseBody = new JSONObject();
-//            responseBody.put("input", event.toJSONString());
+            responseBody.put("input", event.toJSONString());
             responseBody.put("message", greeting);
             
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());

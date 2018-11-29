@@ -84,10 +84,10 @@ public class ProxyWithStream implements RequestStreamHandler {
             responseJson.put("headers", headerJson);
             responseJson.put("body", responseBody.toString());  
 
-        } catch(ParseException pex) {
-            responseJson.put("statusCode", "400");
-            responseJson.put("exception", pex);
-        }
+//        } catch(ParseException pex) {
+//            responseJson.put("statusCode", "400");
+//            responseJson.put("exception", pex);
+//        }
 
         logger.log(responseJson.toJSONString());
         OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");

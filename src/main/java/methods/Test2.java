@@ -11,7 +11,7 @@ public class Test2  implements Method {
 	@Override
 	public void handle(JSONObject event, Map<String, Object> response) {
 
-	    String greeting = "Green Apples";
+	    String greeting = "Red Apples";
 	    
 	    response.put("input", event);
 	    response.put("message", greeting);

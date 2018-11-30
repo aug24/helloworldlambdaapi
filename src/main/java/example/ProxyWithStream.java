@@ -75,7 +75,7 @@ public class ProxyWithStream implements RequestStreamHandler {
 //
         String greeting = "Banana";
             
-            responseBody.put("input", event.toJSONString());
+            responseBody.put("input", event);
             responseBody.put("message", greeting);
             
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());

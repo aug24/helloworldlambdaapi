@@ -5,20 +5,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.io.BufferedReader;
-import java.io.Writer;
 
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.amazonaws.services.lambda.runtime.Context; 
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
-
 import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.json.simple.parser.JSONParser;
-import java.util.Calendar;
-import java.text.SimpleDateFormat;
 
 import methods.Fail;
 import methods.Test;
@@ -35,8 +32,8 @@ public class ProxyWithStream implements RequestStreamHandler {
         logger.log("Loading Java Lambda handler of ProxyWithStream");
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        JSONObject responseBody = new JSONObject();
-        String responseCode = "200";
+        
+        Map<String, Object> response = new HashMap<String, Object>();
 
         try {
             JSONObject event = (JSONObject)parser.parse(reader);
@@ -47,11 +44,13 @@ public class ProxyWithStream implements RequestStreamHandler {
         		method = new Test2();
             else 
             	method = new Fail();
-            method.handle(event, responseBody);
+            method.handle(event, response);
         } catch(ParseException pex) {
-            responseBody.put("statusCode", "400");
-            responseBody.put("exception", pex);
+            response.put("statusCode", "400");
+            response.put("exception", pex);
         }
+        
+        JSONObject responseBody = new JSONObject(response);
 
         logger.log(responseBody.toJSONString());
         OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");

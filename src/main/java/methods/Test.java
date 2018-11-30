@@ -2,6 +2,7 @@ package methods;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 
@@ -11,15 +12,15 @@ public class Test implements Method {
 
 
 	@Override
-	public void handle(JSONObject event, JSONObject responseBody) {
+	public void handle(JSONObject event, Map<String, Object> response) {
 	    String greeting = "Banana";
 	    
-	    responseBody.put("input", event);
-	    responseBody.put("message", greeting);
+	    response.put("input", event);
+	    response.put("message", greeting);
 	    
 	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 	
-	    responseBody.put("date", timeStamp);
+	    response.put("date", timeStamp);
 		
 	}
 }

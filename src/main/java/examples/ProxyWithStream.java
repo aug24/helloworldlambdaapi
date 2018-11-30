@@ -20,6 +20,10 @@ import org.json.simple.parser.JSONParser;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
+import methods.Fail;
+import methods.Test;
+import methods.Test2;
+
 
 public class ProxyWithStream implements RequestStreamHandler {
     JSONParser parser = new JSONParser();
@@ -31,65 +35,19 @@ public class ProxyWithStream implements RequestStreamHandler {
         logger.log("Loading Java Lambda handler of ProxyWithStream");
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-//        JSONObject responseJson = new JSONObject();
         JSONObject responseBody = new JSONObject();
-//        String name = "you";
-//        String city = "World";
-//        String time = "day";
-//        String day = null;
         String responseCode = "200";
 
         try {
             JSONObject event = (JSONObject)parser.parse(reader);
-//            if (event.get("queryStringParameters") != null) {
-//                JSONObject qps = (JSONObject)event.get("queryStringParameters");
-//                if ( qps.get("name") != null) {
-//                    name = (String)qps.get("name");
-//                }
-//            }
-//
-//            if (event.get("pathParameters") != null) {
-//                JSONObject pps = (JSONObject)event.get("pathParameters");
-//                if ( pps.get("proxy") != null) {
-//                    city = (String)pps.get("proxy");
-//                }
-//            }
-//
-//            if (event.get("headers") != null) {
-//                JSONObject hps = (JSONObject)event.get("headers");
-//                if ( hps.get("day") != null) {
-//                    day = (String)hps.get("day");
-//                }
-//            }
-//            
-//            if (event.get("body") != null) {
-//                JSONObject body = (JSONObject)parser.parse((String)event.get("body"));
-//                if ( body.get("time") != null) {
-//                    time = (String)body.get("time");
-//                }
-//            }
-//
-//            String greeting = "Good " + time + ", " + name + " of " + city + ". ";
-//            if (day!=null && day != "") greeting += "Happy " + day + "!";
-//
-//
-        String greeting = "Banana";
-            
-            responseBody.put("input", event);
-            responseBody.put("message", greeting);
-            
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-
-            responseBody.put("date", timeStamp);
-//
-//            JSONObject headerJson = new JSONObject();
-//            headerJson.put("x-custom-header", "my custom header value");
-
-//            responseJson.put("isBase64Encoded", false);
-//            responseJson.put("statusCode", responseCode);
-//            responseJson.put("headers", headerJson);
-//            responseJson.put("body", responseBody.toString());  
-
+            Method method;
+            if (event.get("path").equals("test"))
+        		method = new Test(); 
+            else if (event.get("path").equals("test2"))
+        		method = new Test2();
+            else 
+            	method = new Fail();
+            method.handle(event, responseBody);
         } catch(ParseException pex) {
             responseBody.put("statusCode", "400");
             responseBody.put("exception", pex);

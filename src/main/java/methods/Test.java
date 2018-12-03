@@ -10,10 +10,10 @@ import examples.Method;
 
 public class Test implements Method {
 
+	private String greeting = "Banana";
 
 	@Override
 	public void handle(JSONObject event, Map<String, Object> response) {
-	    String greeting = "Banana";
 	    
 	    response.put("input", event);
 	    response.put("message", greeting);

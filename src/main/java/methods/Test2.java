@@ -8,11 +8,11 @@ import examples.Method;
 
 public class Test2  implements Method {
 
+	private String greeting = "Red Apples";
+	
 	@Override
 	public void handle(JSONObject event, Map<String, Object> response) {
 
-	    String greeting = "Red Apples";
-	    
 	    response.put("input", event);
 	    response.put("message", greeting);
 	    

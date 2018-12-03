@@ -1,4 +1,5 @@
 stages:
+  - test
   - package
   - publish
   - deploy_to_staging
@@ -7,13 +8,17 @@ cache:
   paths:
     - ./target
 
+test:
+  stage: test
+  script:
+    - mvn test
+
 package:
   stage: package
   script:
     - mvn package
   only:
     - master
-
 
 publish:
   stage: publish

@@ -8,7 +8,7 @@ import examples.Method;
 
 public class Apple  implements Method {
 
-	private String greeting = "Green Apples";
+	private String greeting = "Red Apples";
 	
 	@Override
 	public void handle(JSONObject event, Map<String, Object> response) {

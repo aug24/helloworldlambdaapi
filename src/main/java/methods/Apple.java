@@ -6,7 +6,7 @@ import org.json.simple.JSONObject;
 
 import examples.Method;
 
-public class Test2  implements Method {
+public class Apple  implements Method {
 
 	private String greeting = "Red Apples";
 	

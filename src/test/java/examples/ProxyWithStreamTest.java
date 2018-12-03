@@ -1,8 +1,7 @@
-package example;
+package examples;
 
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import methods.UnknownRequest;
 
 /**
  * Unit test for simple App.
@@ -11,28 +10,10 @@ public class ProxyWithStreamTest
     extends TestCase
 {
     /**
-     * Create the test case
-     *
-     * @param testName name of the test case
+     * We would usually have a bunch of tests that the input was interpreted correctly etc
      */
-    public ProxyWithStreamTest( String testName )
+    public void testHandleUnknownPath()
     {
-        super( testName );
-    }
-
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( ProxyWithStreamTest.class );
-    }
-
-    /**
-     * Rigourous Test :-)
-     */
-    public void testProxyWithStream()
-    {
-        assertTrue( true );
+        assertEquals(new ProxyWithStream().getMethod("rubbish").getClass(), UnknownRequest.class);
     }
 }

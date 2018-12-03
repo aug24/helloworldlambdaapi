@@ -6,7 +6,7 @@ import org.json.simple.JSONObject;
 
 import examples.Method;
 
-public class Fail implements Method {
+public class UnknownRequest implements Method {
 
 	@Override
 	public final void handle(JSONObject event, Map<String, Object> response) {

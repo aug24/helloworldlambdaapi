@@ -17,9 +17,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.json.simple.parser.JSONParser;
 
-import methods.Fail;
-import methods.Test;
-import methods.Test2;
+import methods.UnknownRequest;
+import methods.Banana;
+import methods.Apple;
 
 
 public class ProxyWithStream implements RequestStreamHandler {
@@ -32,29 +32,39 @@ public class ProxyWithStream implements RequestStreamHandler {
         logger.log("Loading Java Lambda handler of ProxyWithStream");
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        
-        Map<String, Object> response = new HashMap<String, Object>();
+        Map<String, Object> response = getResponse(reader);        
 
+        String responseBody = new JSONObject(response).toJSONString();
+        logger.log(responseBody);
+        
+        OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
+        writer.write(responseBody);  
+        writer.close();
+    }
+    
+    Map<String, Object> getResponse(BufferedReader reader) throws IOException {
+    	Map<String, Object> response = new HashMap<String, Object>();
         try {
             JSONObject event = (JSONObject)parser.parse(reader);
-            Method method;
-            if (event.get("path").equals("test"))
-        		method = new Test(); 
-            else if (event.get("path").equals("test2"))
-        		method = new Test2();
-            else 
-            	method = new Fail();
-            method.handle(event, response);
+            getMethod(event.get("path").toString()).handle(event, response);
         } catch(ParseException pex) {
             response.put("statusCode", "400");
             response.put("exception", pex);
         }
+        return response;
+    }
+    
+    // This could be better rewritten as a map or something.
+    Method getMethod(String path) {
+        if (path==null) 
+        	return new UnknownRequest();
         
-        JSONObject responseBody = new JSONObject(response);
+        if (path.equals("test"))
+    		return new Banana(); 
 
-        logger.log(responseBody.toJSONString());
-        OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
-        writer.write(responseBody.toJSONString());  
-        writer.close();
+        if (path.equals("test2"))
+    		return new Apple();
+        
+        return new UnknownRequest();
     }
 }

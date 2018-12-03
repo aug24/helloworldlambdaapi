@@ -31,4 +31,14 @@ public class AppleTest extends TestCase {
         assertTrue(response.containsKey("message"));
     }
 
+    /**
+     * Check that the message is sent back correctly
+     */
+    public void testMessageIsCorrect()
+    {
+    	final Map<String, Object> response = new HashMap<>();
+        new Apple().handle(new JSONObject(), response);
+        assertTrue(response.get("message").toString().equals("Green Apples"));
+    }
+
 }

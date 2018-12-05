@@ -9,7 +9,7 @@ import methods.Part;
 import junit.framework.TestCase;
 
 
-public class AppleTest extends TestCase {
+public class PartTest extends TestCase {
 
     /**
      * Check that the original input is returned.  This is used for debugging in the client.

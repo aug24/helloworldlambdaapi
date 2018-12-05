@@ -8,7 +8,7 @@ import org.json.simple.JSONObject;
 
 import examples.Method;
 
-public class Banana implements Method {
+public class User implements Method {
 
 	private String greeting = "Banana";
 

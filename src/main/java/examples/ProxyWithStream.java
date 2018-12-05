@@ -18,8 +18,8 @@ import org.json.simple.parser.ParseException;
 import org.json.simple.parser.JSONParser;
 
 import methods.UnknownRequest;
-import methods.Banana;
-import methods.Apple;
+import methods.User;
+import methods.Part;
 
 
 public class ProxyWithStream implements RequestStreamHandler {
@@ -54,16 +54,16 @@ public class ProxyWithStream implements RequestStreamHandler {
         return response;
     }
     
-    // This could be better rewritten as a map or something.
+    // This could be better rewritten as a map or something.  In Scala, we'd use Map.getOrElse.
     Method getMethod(String path) {
         if (path==null) 
         	return new UnknownRequest();
         
-        if (path.equals("test"))
-    		return new Banana(); 
+        if (path.equals("user"))
+    		return new User(); 
 
-        if (path.equals("test2"))
-    		return new Apple();
+        if (path.equals("tespartt2"))
+    		return new Part();
         
         return new UnknownRequest();
     }

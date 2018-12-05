@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
-import methods.Apple;
+import methods.Part;
 import junit.framework.TestCase;
 
 
@@ -17,7 +17,7 @@ public class AppleTest extends TestCase {
     public void testOriginalInputIsPreserved()
     {
     	final Map<String, Object> response = new HashMap<>();
-        new Apple().handle(new JSONObject(), response);
+        new Part().handle(new JSONObject(), response);
         assertTrue(response.containsKey("input"));
     }
 
@@ -27,7 +27,7 @@ public class AppleTest extends TestCase {
     public void testMessageIsIncluded()
     {
     	final Map<String, Object> response = new HashMap<>();
-        new Apple().handle(new JSONObject(), response);
+        new Part().handle(new JSONObject(), response);
         assertTrue(response.containsKey("message"));
     }
 
@@ -37,7 +37,7 @@ public class AppleTest extends TestCase {
     public void testMessageIsCorrect()
     {
     	final Map<String, Object> response = new HashMap<>();
-        new Apple().handle(new JSONObject(), response);
+        new Part().handle(new JSONObject(), response);
         assertTrue(response.get("message").toString().equals("Green Apples"));
     }
 

@@ -17,12 +17,15 @@ public class PartTest extends TestCase {
     public void testOriginalInputIsPreserved()
     {
     	final Map<String, Object> response = new HashMap<>();
-        new Part().handle(new JSONObject(), response);
+    	final Map<String, Object> request = new HashMap<>();
+    	request.put("one", "two");
+        new Part().handle(new JSONObject(request), response);
         assertTrue(response.containsKey("input"));
+        assertTrue(((JSONObject)response.get("input")).containsKey("one"));
     }
 
     /**
-     * Check that the message is sent back correctly
+     * Check that the message is sent back 
      */
     public void testMessageIsIncluded()
     {
@@ -38,7 +41,7 @@ public class PartTest extends TestCase {
     {
     	final Map<String, Object> response = new HashMap<>();
         new Part().handle(new JSONObject(), response);
-        assertTrue(response.get("message").toString().equals("Green Apples"));
+        assertTrue(response.get("message").toString().equals("Red Apples"));
     }
 
 }

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.io.BufferedReader;
 
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
+import com.sun.org.slf4j.internal.Logger;
 import com.amazonaws.services.lambda.runtime.Context; 
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 
@@ -34,7 +35,7 @@ public class ProxyWithStream implements RequestStreamHandler {
         logger.log("Loading Java Lambda handler of ProxyWithStream");
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        Map<String, Object> response = getResponse(reader);        
+        Map<String, Object> response = getResponse(reader, logger);        
 
         String responseBody = new JSONObject(response).toJSONString();
         logger.log(responseBody);
@@ -44,10 +45,11 @@ public class ProxyWithStream implements RequestStreamHandler {
         writer.close();
     }
     
-    Map<String, Object> getResponse(BufferedReader reader) throws IOException {
+    Map<String, Object> getResponse(BufferedReader reader, LambdaLogger logger) throws IOException {
     	Map<String, Object> response = new HashMap<String, Object>();
         try {
             JSONObject event = (JSONObject)parser.parse(reader);
+            logger.log(event.toJSONString());
             if (event.containsKey("path"))
               getMethod(event.get("path").toString()).handle(event, response);
           else
@@ -86,7 +88,7 @@ public class ProxyWithStream implements RequestStreamHandler {
         if (path.equals("albpart"))
     		return new ALBPart();
         
-        if (path.equals("healthcheck"))
+        if (path.equals("/healthcheck"))
     		return new HealthCheck();
         
         return new UnknownRequest();

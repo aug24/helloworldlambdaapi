@@ -1,5 +1,6 @@
 package methods;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
@@ -14,10 +15,10 @@ public class HealthCheck implements Method {
 		response.put("isBase64Encoded", false);
 		response.put("statusCode", 200);
 		response.put("statusDescription", "200 OK");
-//		    "headers": {
-//		        "Set-cookie": "cookies",
-//		        "Content-Type": "application/json"
-//		    },
+		Map<String, Object> headers = new HashMap<>();
+		//headers.put("Set-cookie", "cookies");
+		headers.put("Content-Type", "application/json");
+		response.put("headers", new JSONObject(headers)); 
 	    response.put("body", "Hello from Lambda");
 	}
 

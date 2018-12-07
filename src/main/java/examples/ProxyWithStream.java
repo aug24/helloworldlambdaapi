@@ -45,12 +45,19 @@ public class ProxyWithStream implements RequestStreamHandler {
     Map<String, Object> getResponse(BufferedReader reader) throws IOException {
     	Map<String, Object> response = new HashMap<String, Object>();
         try {
+        	Map<String, Object> body = new HashMap<String, Object>();
             JSONObject event = (JSONObject)parser.parse(reader);
-            getMethod(event.get("path").toString()).handle(event, response);
+            String path = event.get("path").toString();
+            getMethod(path).handle(event, body);
+            response.put("statusCode", "200");
+            response.put("body", body);
         } catch(ParseException pex) {
             response.put("statusCode", "400");
             response.put("exception", pex);
-        }
+	    } catch(Exception ex) {
+	        response.put("statusCode", "500");
+	        response.put("exception", ex);
+	    }
         return response;
     }
     

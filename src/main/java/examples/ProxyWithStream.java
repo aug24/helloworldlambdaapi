@@ -49,10 +49,13 @@ public class ProxyWithStream implements RequestStreamHandler {
         try {
             JSONObject event = (JSONObject)parser.parse(reader);
             logger.log(event.toJSONString());
-            if (event.containsKey("path"))
-              getMethod(event.get("path").toString()).handle(event, response);
-          else
-        	  getALBMethod(event.get("pathParameters").toString()).handle(event, response);
+            if (event.containsKey("path")) {
+            	logger.log("Event has 'path' key; assuming ALB");
+            	getMethod(event.get("path").toString()).handle(event, response);
+            } else {
+            	logger.log("Event does not have 'path' key; assuming API Gateway");
+            	getALBMethod(event.get("pathParameters").toString()).handle(event, response);
+            }
         } catch(ParseException pex) {
             response.put("statusCode", "400");
             response.put("exception", pex);

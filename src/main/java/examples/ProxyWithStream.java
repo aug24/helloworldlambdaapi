@@ -20,6 +20,7 @@ import org.json.simple.parser.JSONParser;
 import methods.UnknownRequest;
 import methods.User;
 import methods.ALBPart;
+import methods.HealthCheck;
 import methods.Part;
 
 
@@ -47,7 +48,10 @@ public class ProxyWithStream implements RequestStreamHandler {
     	Map<String, Object> response = new HashMap<String, Object>();
         try {
             JSONObject event = (JSONObject)parser.parse(reader);
-            getMethod(event.get("path").toString()).handle(event, response);
+            if (event.containsKey("path"))
+              getMethod(event.get("path").toString()).handle(event, response);
+          else
+        	  getALBMethod(event.get("pathParameters").toString()).handle(event, response);
         } catch(ParseException pex) {
             response.put("statusCode", "400");
             response.put("exception", pex);
@@ -68,6 +72,22 @@ public class ProxyWithStream implements RequestStreamHandler {
         
         if (path.equals("albpart"))
     		return new ALBPart();
+        
+        if (path.equals(""))
+    		return new ALBPart();
+        
+        return new UnknownRequest();
+    }
+    // This could be better rewritten as a map or something.  In Scala, we'd use Map.getOrElse.
+    Method getALBMethod(String path) {
+        if (path==null) 
+        	return new UnknownRequest();
+        
+        if (path.equals("albpart"))
+    		return new ALBPart();
+        
+        if (path.equals("healthcheck"))
+    		return new HealthCheck();
         
         return new UnknownRequest();
     }

@@ -16,8 +16,6 @@ public class ALBPart implements Method {
 	@Override
 	public void handle(JSONObject event, Map<String, Object> response) {
 
-		response.put("input", event);
-		
 		response.put("isBase64Encoded", false);
 		response.put("statusCode", 200);
 		response.put("statusDescription", "200 OK");
@@ -30,6 +28,7 @@ public class ALBPart implements Method {
 	    body.put("message", greeting);
 	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());		
 	    body.put("date", timeStamp);
+		body.put("input", event);
 
 	    response.put("body", new JSONObject(body));
 	}

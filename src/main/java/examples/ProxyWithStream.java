@@ -87,7 +87,7 @@ public class ProxyWithStream implements RequestStreamHandler {
         if (path==null) 
         	return new UnknownRequest();
         
-        if (path.equals("albpart"))
+        if (path.equals("/albpart"))
     		return new ALBPart();
         
         if (path.equals("/healthcheck"))

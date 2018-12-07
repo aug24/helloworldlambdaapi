@@ -19,6 +19,7 @@ import org.json.simple.parser.JSONParser;
 
 import methods.UnknownRequest;
 import methods.User;
+import methods.ALBPart;
 import methods.Part;
 
 
@@ -66,7 +67,7 @@ public class ProxyWithStream implements RequestStreamHandler {
     		return new Part();
         
         if (path.equals("albpart"))
-    		return new Part();
+    		return new ALBPart();
         
         return new UnknownRequest();
     }

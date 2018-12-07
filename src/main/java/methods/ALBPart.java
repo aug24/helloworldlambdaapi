@@ -30,7 +30,7 @@ public class ALBPart implements Method {
 	    body.put("date", timeStamp);
 		body.put("input", event);
 
-	    response.put("body", new JSONObject(body));
+	    response.put("body", new JSONObject(body).toJSONString());
 	}
 
 }

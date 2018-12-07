@@ -10,7 +10,6 @@ import java.util.Map;
 import java.io.BufferedReader;
 
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
-import com.sun.org.slf4j.internal.Logger;
 import com.amazonaws.services.lambda.runtime.Context; 
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 

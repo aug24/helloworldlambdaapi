@@ -100,7 +100,7 @@ public class ProxyWithStream implements RequestStreamHandler {
     	if (body == null) {
 	    	response.put("statusCode", 400);
 	    	response.put("statusDescription", "400 Client Error");
-	    	response.put("body", null);
+	    	response.put("body", new JSONObject().toJSONString());
     	} else {
     		response.put("statusCode", 200);
     		response.put("statusDescription", "200 OK");

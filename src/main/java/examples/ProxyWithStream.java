@@ -17,12 +17,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.json.simple.parser.JSONParser;
 
-import methods.UnknownRequest;
-import methods.User;
-import methods.ALBPart;
 import methods.HealthCheck;
 import methods.Part;
-
+import methods.User;
 
 public class ProxyWithStream implements RequestStreamHandler {
     JSONParser parser = new JSONParser();
@@ -34,9 +31,7 @@ public class ProxyWithStream implements RequestStreamHandler {
         logger.log("Loading Java Lambda handler of ProxyWithStream");
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        Map<String, Object> response = getResponse(reader, logger);        
-
-        String responseBody = new JSONObject(response).toJSONString();
+        String responseBody = getResponse(reader, logger);        
         logger.log(responseBody);
         
         OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
@@ -44,55 +39,73 @@ public class ProxyWithStream implements RequestStreamHandler {
         writer.close();
     }
     
-    Map<String, Object> getResponse(BufferedReader reader, LambdaLogger logger) throws IOException {
-    	Map<String, Object> response = new HashMap<String, Object>();
+    String getResponse(BufferedReader reader, LambdaLogger logger) throws IOException {
+    	Map<String, Object> response;
         try {
             JSONObject event = (JSONObject)parser.parse(reader);
             logger.log(event.toJSONString());
-            if (event.containsKey("requestContext")) {
-            	logger.log("Event has 'requestContext' key; assuming ALB");
-            	getALBMethod(event.get("path").toString()).handle(event, response);
-            } else {
-            	logger.log("Event does not have 'requestContext' key; assuming API Gateway");
-            	getMethod(event.get("path").toString()).handle(event, response);
-            }
+            String path = event.containsKey("path") 
+            	? event.get("path").toString().replace("^/", "")
+            	: "";
+            response = getMethod(path, event, logger);
         } catch(ParseException pex) {
+        	response = new HashMap<String, Object>();
             response.put("statusCode", "400");
             response.put("exception", pex);
         }
-        return response;
+        return new JSONObject(response).toJSONString();
+    }
+    
+    Map<String, Object> getMethod(String path, JSONObject event, LambdaLogger logger) {
+        return event.containsKey("requestContext")
+        	? getALBMethod(path, event, logger)
+	    	: getAPIGMethod(path, event, logger);
     }
     
     // This could be better rewritten as a map or something.  In Scala, we'd use Map.getOrElse.
-    Method getMethod(String path) {
-        if (path==null) 
-        	return new UnknownRequest();
-        
-        if (path.equals("user"))
-    		return new User(); 
-
-        if (path.equals("part"))
-    		return new Part();
-        
-        if (path.equals("albpart"))
-    		return new ALBPart();
-        
-        if (path.equals(""))
-    		return new ALBPart();
-        
-        return new UnknownRequest();
+    Map<String, Object>  getAPIGMethod(String path, JSONObject event, LambdaLogger logger) {
+    	logger.log("Event does not have 'requestContext' key; assuming API Gateway");
+    	
+    	Map<String, Object> body = getBody(path, event);
+    	if (body != null) return body;
+    	
+        Map<String, Object> response = new HashMap<String, Object>();
+    	response.put("statusCode", 400);
+    	response.put("statusDescription", "400 Client Error");
+        return response;
     }
+
+	private Map<String, Object> getBody(String path, JSONObject event) {
+		if (path != null && path.equals("user"))
+    		return new User().handle(event); 
+        if (path != null && path.equals("part"))
+    		return new Part().handle(event);
+        if (path != null && path.equals("healthcheck"))
+    		return new HealthCheck().handle(event);
+        return null;
+	}
+	
     // This could be better rewritten as a map or something.  In Scala, we'd use Map.getOrElse.
-    Method getALBMethod(String path) {
-        if (path==null) 
-        	return new UnknownRequest();
+    Map<String, Object> getALBMethod(String path, JSONObject event, LambdaLogger logger) {
+    	logger.log("Event has 'requestContext' key; assuming ALB");
+    	
+    	Map<String, Object> response = new HashMap<String, Object>();
+		response.put("isBase64Encoded", false);
+		Map<String, Object> headers = new HashMap<>();
+		headers.put("Content-Type", "application/json");
+		response.put("headers", new JSONObject(headers)); 
+
+    	Map<String, Object> body = getBody(path, event);
+
+    	if (body == null) {
+	    	response.put("statusCode", 400);
+	    	response.put("statusDescription", "400 Client Error");
+    	} else {
+    		response.put("statusCode", 200);
+    		response.put("statusDescription", "200 OK");
+    	}
         
-        if (path.equals("/albpart"))
-    		return new ALBPart();
-        
-        if (path.equals("/healthcheck"))
-    		return new HealthCheck();
-        
-        return new UnknownRequest();
+        response.put("body", new JSONObject(body).toJSONString());
+        return response;
     }
 }

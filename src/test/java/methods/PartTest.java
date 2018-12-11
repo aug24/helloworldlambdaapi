@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
-import methods.Part;
 import junit.framework.TestCase;
+import methods.Part;
 
 
 public class PartTest extends TestCase {
@@ -16,10 +16,9 @@ public class PartTest extends TestCase {
      */
     public void testOriginalInputIsPreserved()
     {
-    	final Map<String, Object> response = new HashMap<>();
     	final Map<String, Object> request = new HashMap<>();
     	request.put("one", "two");
-        new Part().handle(new JSONObject(request), response);
+    	final Map<String, Object> response = new Part().handle(new JSONObject(request));
         assertTrue(response.containsKey("input"));
         assertTrue(((JSONObject)response.get("input")).containsKey("one"));
     }
@@ -29,8 +28,7 @@ public class PartTest extends TestCase {
      */
     public void testMessageIsIncluded()
     {
-    	final Map<String, Object> response = new HashMap<>();
-        new Part().handle(new JSONObject(), response);
+    	final Map<String, Object> response = new Part().handle(new JSONObject());
         assertTrue(response.containsKey("message"));
     }
 
@@ -39,8 +37,7 @@ public class PartTest extends TestCase {
      */
     public void testMessageIsCorrect()
     {
-    	final Map<String, Object> response = new HashMap<>();
-        new Part().handle(new JSONObject(), response);
+    	final Map<String, Object> response = new Part().handle(new JSONObject());
         assertTrue(response.get("message").toString().equals("Red Apples"));
     }
 

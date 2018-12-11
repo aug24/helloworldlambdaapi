@@ -38,7 +38,7 @@ public class PartTest extends TestCase {
     public void testMessageIsCorrect()
     {
     	final Map<String, Object> response = new Part().handle(new JSONObject());
-        assertTrue(response.get("message").toString().equals("Red Apples"));
+        assertTrue(response.get("message").toString().equals("Green Apples"));
     }
 
 }

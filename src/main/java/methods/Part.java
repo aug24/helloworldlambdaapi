@@ -11,7 +11,7 @@ import examples.Method;
 
 public class Part implements Method {
 
-	private String greeting = "Red Apples";
+	private String greeting = "Green Apples";
 	
 	@Override
 	public Map<String, Object> handle(JSONObject event) {

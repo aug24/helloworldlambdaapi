@@ -44,9 +44,7 @@ public class ProxyWithStream implements RequestStreamHandler {
         try {
             JSONObject event = (JSONObject)parser.parse(reader);
             logger.log(event.toJSONString());
-            String path = event.containsKey("path") 
-            	? event.get("path").toString().replace("^/", "")
-            	: "";
+            String path = getPath(event);
         	logger.log("Path is " + path);
             response = getMethod(path, event, logger);
         } catch(ParseException pex) {
@@ -56,6 +54,12 @@ public class ProxyWithStream implements RequestStreamHandler {
         }
         return new JSONObject(response).toJSONString();
     }
+
+	String getPath(JSONObject event) {
+		return event.containsKey("path") 
+			? event.get("path").toString().replaceAll("^/+", "")
+			: "";
+	}
     
     Map<String, Object> getMethod(String path, JSONObject event, LambdaLogger logger) {
         return event.containsKey("requestContext")

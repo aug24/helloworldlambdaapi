@@ -47,6 +47,7 @@ public class ProxyWithStream implements RequestStreamHandler {
             String path = event.containsKey("path") 
             	? event.get("path").toString().replace("^/", "")
             	: "";
+        	logger.log("Path is " + path);
             response = getMethod(path, event, logger);
         } catch(ParseException pex) {
         	response = new HashMap<String, Object>();
